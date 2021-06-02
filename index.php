@@ -1,27 +1,25 @@
 <?php
-$phpversion= PHP_VERSION;
-if ($phpversion>7){
-    $requestUri =$_GET['uri'] ?? 'home';
-
-}else{
-    $requestUri= isset($_GET['uri']) ? $_GET['uri'] : 'Home';
-
-}
+//$phpversion= PHP_VERSION;
+//if ($phpversion>7){
+//    $requestUri =$_GET['uri'] ?? 'home';
+//
+//}else{
+require_once "config/config.php";
+$requestUri= isset($_GET['uri']) ? $_GET['uri'] : 'Home';
+$requestUri = str_replace('.php','',$requestUri);
+$requestUri .= ".php";
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-<h1><?php
-    echo "$requestUri";
-    ?>
-</h1>
 
-</body>
-</html>
+<?php
+$pagePath = root_path('frontend/pages/'. $requestUri);
+require_once root_path('frontend/layouts/header.php');
+require_once root_path('frontend/layouts/top-header.php');
+
+if (file_exists($pagePath) && is_file($pagePath)){
+    require_once $pagePath;
+}else{
+    echo "<h1>Page not found 404 {$requestUri}</h1>";
+}
+require_once root_path('frontend/layouts/footer.php');
+?>
+
